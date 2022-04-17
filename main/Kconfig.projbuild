@@ -1,0 +1,22 @@
+menu "Auto Watering"
+
+    config SOLENOID_VALVE_PIN
+        int "Solenoid valve data pin"
+        range 0 34
+        default 0
+        help
+            The GPIO pin to use for activating the solenoid valve.
+
+    config WIFI_SSID
+        string "WiFi SSID"
+        default "myssid"
+        help
+            SSID (network name) to connect to.
+
+    config WIFI_PASSWORD
+        string "WiFi Password"
+        default "mypassword"
+        help
+            WiFi password (WPA or WPA2) to use.
+
+endmenu
