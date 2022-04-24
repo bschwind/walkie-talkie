@@ -7,10 +7,11 @@
 static QueueHandle_t esp_now_message_queue;
 
 void app_main(void) {
+    // TODO(bschwind) - Use a stream buffer instead with xStreamBufferCreate.
     esp_now_message_queue = xQueueCreate(32, sizeof(uint16_t));
 
     init_transport(esp_now_message_queue);
-    init_audio();
+    init_audio(esp_now_message_queue);
 
     while (true) {
         printf("Hello world!\n");

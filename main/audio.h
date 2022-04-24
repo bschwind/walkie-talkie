@@ -5,6 +5,6 @@
 #include "freertos/task.h"
 #include "freertos/queue.h"
 
-void init_audio();
+void init_audio(QueueHandle_t message_queue);
 
 #endif
