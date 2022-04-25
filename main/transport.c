@@ -63,12 +63,14 @@ static void init_esp_now() {
 }
 
 static void receiver_task(void* task_param) {
-    QueueHandle_t message_queue = (QueueHandle_t)task_param;
+    StreamBufferHandle_t mic_stream_buf = (StreamBufferHandle_t)task_param;
     uint16_t msg = 0;
 
     while (true) {
-        if (xQueueReceive(message_queue, (void*)&msg, portMAX_DELAY)) {
-            // printf("Receive %u\n", msg);
+        size_t num_bytes = xStreamBufferReceive(mic_stream_buf, (void*)&msg, 2, portMAX_DELAY);
+
+        if (num_bytes > 0) {
+            printf("Receive %u\n", msg);
         }
     }
 }
@@ -86,12 +88,12 @@ static void init_non_volatile_storage() {
     }
 }
 
-void init_transport(QueueHandle_t message_queue) {
+void init_transport(StreamBufferHandle_t mic_stream_buf) {
     printf("Init transport!\n");
 
     init_non_volatile_storage();
     init_wifi();
     init_esp_now();
 
-    xTaskCreate(receiver_task, "receiver_task", 4096, (void*)message_queue, 10, NULL);
+    xTaskCreate(receiver_task, "receiver_task", 4096, (void*)mic_stream_buf, 10, NULL);
 }

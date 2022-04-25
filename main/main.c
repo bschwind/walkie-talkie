@@ -4,14 +4,13 @@
 #include "audio.h"
 #include "transport.h"
 
-static QueueHandle_t esp_now_message_queue;
+static StreamBufferHandle_t mic_stream_buf;
 
 void app_main(void) {
-    // TODO(bschwind) - Use a stream buffer instead with xStreamBufferCreate.
-    esp_now_message_queue = xQueueCreate(32, sizeof(uint16_t));
+    mic_stream_buf = xStreamBufferCreate(4096, 1);
 
-    init_transport(esp_now_message_queue);
-    init_audio(esp_now_message_queue);
+    init_transport(mic_stream_buf);
+    init_audio(mic_stream_buf);
 
     while (true) {
         printf("Hello world!\n");

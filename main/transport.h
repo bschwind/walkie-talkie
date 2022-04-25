@@ -3,8 +3,8 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "freertos/queue.h"
+#include "freertos/stream_buffer.h"
 
-void init_transport(QueueHandle_t message_queue);
+void init_transport(StreamBufferHandle_t mic_stream_buf);
 
 #endif

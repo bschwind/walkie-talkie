@@ -54,7 +54,7 @@ static void init_mic() {
 }
 
 static void audio_capture_task(void* task_param) {
-    QueueHandle_t message_queue = (QueueHandle_t)task_param;
+    StreamBufferHandle_t mic_stream_buf = (StreamBufferHandle_t)task_param;
     init_mic();
 
     size_t bytes_read = 0;
@@ -64,14 +64,14 @@ static void audio_capture_task(void* task_param) {
         i2s_read(I2S_PORT, (char*)mic_read_buf, READ_BUF_SIZE_BYTES, &bytes_read, ticks_to_wait);
 
         uint16_t msg = 7;
-        xQueueSend(message_queue, &msg, portMAX_DELAY);
+        xStreamBufferSend(mic_stream_buf, &msg, 2, portMAX_DELAY);
 
         printf("Mic bytes read: %i\n", bytes_read);
     }
 }
 
-void init_audio(QueueHandle_t message_queue) {
+void init_audio(StreamBufferHandle_t mic_stream_buf) {
     printf("Init audio!\n");
 
-    xTaskCreate(audio_capture_task, "audio_capture_task", 4096, (void*)message_queue, 10, NULL);
+    xTaskCreate(audio_capture_task, "audio_capture_task", 4096, (void*)mic_stream_buf, 10, NULL);
 }
