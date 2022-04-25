@@ -5,6 +5,7 @@
 
 static uint8_t broadcast_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 static uint8_t esp_now_send_buf[250];
+static StreamBufferHandle_t network_stream_buf;
 
 static void init_wifi() {
     esp_err_t err = esp_netif_init();
@@ -44,10 +45,21 @@ static void init_wifi() {
     // WIFI_PROTOCOL_11B|WIFI_PROTOCOL_11G|WIFI_PROTOCOL_11N|WIFI_PROTOCOL_LR);
 }
 
+static void recv_callback(const uint8_t* mac_addr, const uint8_t* data, int len) {
+    printf("ESP NOW RECV - %u bytes\n", len);
+
+    xStreamBufferSend(network_stream_buf, data, len, portMAX_DELAY);
+}
+
 static void init_esp_now() {
     esp_err_t err = esp_now_init();
     if (err != ESP_OK) {
         printf("Error starting ESP NOW\n");
+    }
+
+    err = esp_now_register_recv_cb(recv_callback);
+    if (err != ESP_OK) {
+        printf("Error registering ESP NOW receiver callback\n");
     }
 
     esp_now_peer_info_t broadcast_peer = {
@@ -65,7 +77,7 @@ static void init_esp_now() {
     }
 }
 
-static void receiver_task(void* task_param) {
+static void sender_task(void* task_param) {
     StreamBufferHandle_t mic_stream_buf = (StreamBufferHandle_t)task_param;
 
     while (true) {
@@ -97,12 +109,13 @@ static void init_non_volatile_storage() {
     }
 }
 
-void init_transport(StreamBufferHandle_t mic_stream_buf) {
+void init_transport(StreamBufferHandle_t mic_stream_buf, StreamBufferHandle_t net_stream_buf) {
     printf("Init transport!\n");
+    network_stream_buf = net_stream_buf;
 
     init_non_volatile_storage();
     init_wifi();
     init_esp_now();
 
-    xTaskCreate(receiver_task, "receiver_task", 4096, (void*)mic_stream_buf, 10, NULL);
+    xTaskCreate(sender_task, "sender_task", 4096, (void*)mic_stream_buf, 10, NULL);
 }
