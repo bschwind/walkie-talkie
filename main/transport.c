@@ -3,6 +3,9 @@
 #include "esp_now.h"
 #include "nvs_flash.h"
 
+static uint8_t broadcast_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+static uint8_t esp_now_send_buf[250];
+
 static void init_wifi() {
     esp_err_t err = esp_netif_init();
     if (err != ESP_OK) {
@@ -64,13 +67,19 @@ static void init_esp_now() {
 
 static void receiver_task(void* task_param) {
     StreamBufferHandle_t mic_stream_buf = (StreamBufferHandle_t)task_param;
-    uint16_t msg = 0;
 
     while (true) {
-        size_t num_bytes = xStreamBufferReceive(mic_stream_buf, (void*)&msg, 2, portMAX_DELAY);
+        size_t num_bytes = xStreamBufferReceive(mic_stream_buf, (void*)esp_now_send_buf,
+                                                sizeof(esp_now_send_buf), portMAX_DELAY);
 
         if (num_bytes > 0) {
-            printf("Receive %u\n", msg);
+            int16_t sample = (esp_now_send_buf[0] << 8) | esp_now_send_buf[1];
+            printf("Received %u bytes - first i16: %i\n", num_bytes, sample);
+
+            esp_err_t err = esp_now_send(broadcast_mac, esp_now_send_buf, sizeof(esp_now_send_buf));
+            if (err != ESP_OK) {
+                printf("Error sending ESP NOW packet: %x\n", err);
+            }
         }
     }
 }
