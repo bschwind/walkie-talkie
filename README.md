@@ -1,6 +1,6 @@
-# esp32-template
+# walkie-talkie
 
-A github template for starting projects based on the ESP-IDF.
+An ESP32-based walkie-talkie for communicating on bicycle/motorcycle rides
 
 ## Clone
 

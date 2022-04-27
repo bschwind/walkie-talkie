@@ -5,7 +5,7 @@
 
 export IDF_PATH=./esp-idf/
 
-PROJECT_NAME := esp32-template
+PROJECT_NAME := walkie-talkie
 
 include $(IDF_PATH)/make/project.mk
 
