@@ -46,7 +46,7 @@ static void init_wifi() {
 }
 
 static void recv_callback(const uint8_t* mac_addr, const uint8_t* data, int len) {
-    printf("ESP NOW RECV - %u bytes\n", len);
+    // printf("ESP NOW RECV - %u bytes\n", len);
 
     xStreamBufferSend(network_stream_buf, data, len, portMAX_DELAY);
 }
@@ -86,7 +86,7 @@ static void sender_task(void* task_param) {
 
         if (num_bytes > 0) {
             int16_t sample = (esp_now_send_buf[0] << 8) | esp_now_send_buf[1];
-            printf("Received %u bytes - first i16: %i\n", num_bytes, sample);
+            // printf("Received %u bytes - first i16: %i\n", num_bytes, sample);
 
             esp_err_t err = esp_now_send(broadcast_mac, esp_now_send_buf, sizeof(esp_now_send_buf));
             if (err != ESP_OK) {

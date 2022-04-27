@@ -12,7 +12,7 @@ void app_main(void) {
     network_stream_buf = xStreamBufferCreate(4096, 1);
 
     init_transport(mic_stream_buf, network_stream_buf);
-    init_audio(mic_stream_buf);
+    init_audio(mic_stream_buf, network_stream_buf);
 
     while (true) {
         printf("Hello world!\n");
