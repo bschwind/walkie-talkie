@@ -4,6 +4,8 @@
 #include "nvs_flash.h"
 #include "esp_private/wifi.h"
 
+#define WIFI_CHANNEL (12)
+
 static uint8_t broadcast_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 static uint8_t esp_now_send_buf[250];
 static StreamBufferHandle_t network_stream_buf;
@@ -41,6 +43,11 @@ static void init_wifi() {
         printf("Error starting wifi\n");
     }
 
+    err = esp_wifi_set_channel(WIFI_CHANNEL, WIFI_SECOND_CHAN_NONE);
+    if (err != ESP_OK) {
+        printf("Error setting wifi channel\n");
+    }
+
     // Enable long-range
     // esp_wifi_set_protocol(ESP_IF_WIFI_STA,
     // WIFI_PROTOCOL_11B|WIFI_PROTOCOL_11G|WIFI_PROTOCOL_11N|WIFI_PROTOCOL_LR);
@@ -69,7 +76,7 @@ static void init_esp_now() {
     esp_now_peer_info_t broadcast_peer = {
         .peer_addr = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
         .lmk = {0},
-        .channel = 1, // ranges from 0-14
+        .channel = WIFI_CHANNEL, // ranges from 0-14
         .ifidx = ESP_IF_WIFI_STA,
         .encrypt = false,
         .priv = NULL,
