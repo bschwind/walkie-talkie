@@ -14,6 +14,9 @@ void app_main(void) {
     init_transport(mic_stream_buf, network_stream_buf);
     init_audio(mic_stream_buf, network_stream_buf);
 
+    // Loopback testing
+    // init_audio(mic_stream_buf, mic_stream_buf);
+
     while (true) {
         printf("Hello world!\n");
         vTaskDelay(1000 / portTICK_PERIOD_MS);
