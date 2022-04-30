@@ -42,7 +42,7 @@ static void init_wifi() {
     }
 
     // Enable long-range
-    // esp_wifi_set_protocol(ESPNOW_WIFI_IF,
+    // esp_wifi_set_protocol(ESP_IF_WIFI_STA,
     // WIFI_PROTOCOL_11B|WIFI_PROTOCOL_11G|WIFI_PROTOCOL_11N|WIFI_PROTOCOL_LR);
 
     // Enable high speed mode
