@@ -2,6 +2,7 @@
 #include "esp_wifi.h"
 #include "esp_now.h"
 #include "nvs_flash.h"
+#include "esp_private/wifi.h"
 
 static uint8_t broadcast_mac[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 static uint8_t esp_now_send_buf[250];
@@ -43,6 +44,9 @@ static void init_wifi() {
     // Enable long-range
     // esp_wifi_set_protocol(ESPNOW_WIFI_IF,
     // WIFI_PROTOCOL_11B|WIFI_PROTOCOL_11G|WIFI_PROTOCOL_11N|WIFI_PROTOCOL_LR);
+
+    // Enable high speed mode
+    err = esp_wifi_internal_set_fix_rate(ESP_IF_WIFI_STA, 1, WIFI_PHY_RATE_MCS7_SGI);
 }
 
 static void recv_callback(const uint8_t* mac_addr, const uint8_t* data, int len) {
