@@ -85,8 +85,7 @@ static void sender_task(void* task_param) {
                                                 sizeof(esp_now_send_buf), portMAX_DELAY);
 
         if (num_bytes > 0) {
-            int16_t sample = (esp_now_send_buf[0] << 8) | esp_now_send_buf[1];
-            // printf("Received %u bytes - first i16: %i\n", num_bytes, sample);
+            // printf("Received %u bytes\n", num_bytes);
 
             esp_err_t err = esp_now_send(broadcast_mac, esp_now_send_buf, sizeof(esp_now_send_buf));
             if (err != ESP_OK) {
