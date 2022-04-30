@@ -126,14 +126,14 @@ static void audio_playback_task(void* task_param) {
 
     init_speaker();
 
-    size_t bytes_writen = 0;
+    size_t bytes_written = 0;
 
     while (true) {
         size_t num_bytes = xStreamBufferReceive(net_stream_buf, (void*)audio_output_buf,
                                                 sizeof(audio_output_buf), portMAX_DELAY);
 
         if (num_bytes > 0) {
-            esp_err_t err = i2s_write(SPEAKER_I2S_PORT, audio_output_buf, num_bytes, &bytes_writen,
+            esp_err_t err = i2s_write(SPEAKER_I2S_PORT, audio_output_buf, num_bytes, &bytes_written,
                                       portMAX_DELAY);
             if (err != ESP_OK) {
                 printf("Error writing I2S: %0x\n", err);
