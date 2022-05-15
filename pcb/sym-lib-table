@@ -1,3 +1,4 @@
 (sym_lib_table
   (lib (name "rt9080-33gj5")(type "KiCad")(uri "${KIPRJMOD}/extra-parts/schematics/rt9080-33gj5.kicad_sym")(options "")(descr ""))
+  (lib (name "ssss811101")(type "KiCad")(uri "${KIPRJMOD}/extra-parts/schematics/ssss811101.kicad_sym")(options "")(descr ""))
 )
