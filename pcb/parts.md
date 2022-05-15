@@ -17,3 +17,8 @@ On/Off Switch:
     SSSS811101
     C109335
     https://datasheet.lcsc.com/lcsc/1808041445_ALPSALPINE-SSSS811101_C109335.pdf
+
+Headphone Jack:
+    PJ-320D-4A
+    C95562
+    https://datasheet.lcsc.com/lcsc/1810121716_Korean-Hroparts-Elec-PJ-320D-4A_C95562.pdf
