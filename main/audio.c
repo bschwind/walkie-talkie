@@ -36,6 +36,7 @@ static void init_mic() {
         .use_apll = false,
         .tx_desc_auto_clear = false,
         .fixed_mclk = 0,
+        .mclk_multiple = I2S_MCLK_MULTIPLE_256,
     };
 
     esp_err_t err = i2s_driver_install(MIC_I2S_PORT, &i2s_config, 0, NULL);
@@ -44,7 +45,7 @@ static void init_mic() {
     }
 
     i2s_pin_config_t pin_config = {
-        .mck_io_num = I2S_PIN_NO_CHANGE,
+        .mck_io_num = 0,
         .bck_io_num = MIC_I2S_BCLK_PIN,
         .ws_io_num = MIC_I2S_WS_PIN,
         .data_out_num = I2S_PIN_NO_CHANGE,
@@ -80,6 +81,7 @@ static void audio_capture_task(void* task_param) {
         xStreamBufferSend(mic_stream_buf, mic_read_buf, READ_BUF_SIZE_BYTES, portMAX_DELAY);
 
         // printf("Mic bytes read: %i\n", bytes_read);
+        printf("First byte: %u\n", mic_read_buf[0]);
     }
 }
 
